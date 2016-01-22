@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import it.keisoft.garefijlkam.bean.Classifica;
 import it.keisoft.garefijlkam.bean.TableBean;
 import it.keisoft.garefijlkam.util.BaseActivity;
 import it.keisoft.garefijlkam.util.GetInfo;
@@ -89,10 +90,18 @@ public class ShowTableActivity extends BaseActivity {
                 JSONObject jsonObject = (JSONObject) new JSONArray(json).get(0);
                 int max_round = jsonObject.getInt("max_round");
 
-                JSONArray jsonArray = jsonObject.getJSONArray("risultati");
+                JSONArray jsonArray = jsonObject.getJSONArray("podio");
+                ArrayList<Classifica> podio = new ArrayList<>();
+                for(int i=0; i<jsonArray.length(); i++){
+                    Classifica classifica = new Classifica((JSONObject) jsonArray.get(i));
+                    podio.add(classifica);
+                }
+                tabAdapter.setPodio(podio);
+
+                jsonArray = jsonObject.getJSONArray("risultati");
                 String lastRound = "";
-                for(int j=0; j<jsonArray.length(); j++){
-                    TableBean b = new TableBean((JSONObject) jsonArray.get(j));
+                for(int i=0; i<jsonArray.length(); i++){
+                    TableBean b = new TableBean((JSONObject) jsonArray.get(i));
                     if(!lastRound.equalsIgnoreCase(b.getC_round())){
                         if(beans.size() > 0) {
                             ArrayList <TableBean> tbs = (ArrayList<TableBean>) beans.clone();

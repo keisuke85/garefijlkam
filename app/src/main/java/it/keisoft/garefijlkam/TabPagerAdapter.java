@@ -26,6 +26,7 @@ import java.util.Map;
 
 import it.keisoft.garefijlkam.R;
 import it.keisoft.garefijlkam.TableAdapter;
+import it.keisoft.garefijlkam.bean.Classifica;
 import it.keisoft.garefijlkam.bean.TableBean;
 
 /**
@@ -33,11 +34,13 @@ import it.keisoft.garefijlkam.bean.TableBean;
  */
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
     private static Map<String, ArrayList<TableBean>> mapBeans;
+    private static ArrayList<Classifica> podio;
 //    private int start = 0;
 
     public TabPagerAdapter(FragmentManager fm) {
         super(fm);
         mapBeans = new HashMap<>();
+        podio = new ArrayList<>();
     }
 
     @Override
@@ -64,7 +67,15 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
         this.mapBeans = mapBeans;
     }
 
-/*    public int getStart() {
+    public static ArrayList<Classifica> getPodio() {
+        return podio;
+    }
+
+    public void setPodio(ArrayList<Classifica> podio) {
+        this.podio = podio;
+    }
+
+    /*    public int getStart() {
         return start;
     }
 
@@ -86,32 +97,35 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
             Bundle bundle = this.getArguments();
             int key = bundle.getInt(TablePart.EXTRA_BUNDLE, 0);
 
-            if(key == 8){
+            if(key == 0){
                 // uso un layout con una singola listView
-/*                android = inflater.inflate(R.layout.current_tournament, container, false);
+                android = inflater.inflate(R.layout.current_tournament, container, false);
                 listView = (ListView) android.findViewById(R.id.listView);
                 List<TableBean> podio = new ArrayList<>();
-                for (TableBean t : mapBeans.get(Integer.toString(key))) {
-                    switch (t.getIncontro()){
+                TableBean tmp;
+                for (Classifica c : getPodio()) {
+                    tmp = new TableBean();
+                    switch (c.getC_pos()){
                         case "1":
-                            t.setImage(R.drawable.oro);
+                            tmp.setImage(R.drawable.oro);
                             break;
                         case "2":
-                            t.setImage(R.drawable.argento);
+                            tmp.setImage(R.drawable.argento);
                             break;
                         case "3":
-                            t.setImage(R.drawable.bronzo);
+                            tmp.setImage(R.drawable.bronzo);
                             break;
                         case "4":
-                            t.setImage(R.drawable.bronzo);
+                            tmp.setImage(R.drawable.bronzo);
                             break;
                     }
-                    podio.add(t);
+                    tmp.setBianco(c.getAtleta());
+                    podio.add(tmp);
                 }
 
                 TableAdapter tableAdapter = new TableAdapter(getContext(), R.layout.list_podium_adapter, podio);
                 listView.setAdapter(tableAdapter);
-*/            }else {
+            }else {
                 android = inflater.inflate(R.layout.current_weight, container, false);
 
                 listView = (ListView) android.findViewById(R.id.listView);
