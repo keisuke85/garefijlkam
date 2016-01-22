@@ -49,11 +49,11 @@ public class TableAdapter extends ArrayAdapter<TableBean> {
             holder = (ViewHolder) v.getTag();
         }
 
-        holder.primoTextView.setText(table.getBianco());
-        holder.socPrimoTextView.setText(table.getSocBianco());
+        holder.primoTextView.setText(table.getBianco().getT_nome());
+        holder.socPrimoTextView.setText(table.getBianco().getT_soc());
         if(holder.secondoTextView != null) {
-            holder.secondoTextView.setText(table.getBlu());
-            holder.socSecondoTextView.setText(table.getSocBlu());
+            holder.secondoTextView.setText(table.getBlu().getT_nome());
+            holder.socSecondoTextView.setText(table.getBlu().getT_soc());
         }
         if(table.getImage() != 0) {
             holder.personImageView.setImageResource(table.getImage());

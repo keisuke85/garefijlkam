@@ -6,5 +6,5 @@
     android:layout_alignParentRight="true"
     android:ellipsize="marquee"
     android:singleLine="true"
-    android:textSize="20sp"
+    android:textSize="30sp"
     android:textColor="#000"/>

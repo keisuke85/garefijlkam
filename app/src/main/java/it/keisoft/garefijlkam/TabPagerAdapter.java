@@ -33,7 +33,7 @@ import it.keisoft.garefijlkam.bean.TableBean;
  */
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
     private static Map<String, ArrayList<TableBean>> mapBeans;
-    private int start = 0;
+//    private int start = 0;
 
     public TabPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -43,7 +43,8 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int i) {
         Bundle args = new Bundle();
-        args.putInt(TablePart.EXTRA_BUNDLE, i+getStart());
+//        args.putInt(TablePart.EXTRA_BUNDLE, i+getStart());
+        args.putInt(TablePart.EXTRA_BUNDLE, getCount()-i);
         TablePart newFragment = new TablePart ();
         newFragment.setArguments(args);
         return newFragment;
@@ -63,14 +64,14 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
         this.mapBeans = mapBeans;
     }
 
-    public int getStart() {
+/*    public int getStart() {
         return start;
     }
 
     public void setStart(int start) {
         this.start = start;
     }
-
+*/
 
     public static class TablePart extends Fragment {
         public static final String EXTRA_BUNDLE = "tables";
@@ -87,7 +88,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
             if(key == 8){
                 // uso un layout con una singola listView
-                android = inflater.inflate(R.layout.current_tournament, container, false);
+/*                android = inflater.inflate(R.layout.current_tournament, container, false);
                 listView = (ListView) android.findViewById(R.id.listView);
                 List<TableBean> podio = new ArrayList<>();
                 for (TableBean t : mapBeans.get(Integer.toString(key))) {
@@ -110,7 +111,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
                 TableAdapter tableAdapter = new TableAdapter(getContext(), R.layout.list_podium_adapter, podio);
                 listView.setAdapter(tableAdapter);
-            }else {
+*/            }else {
                 android = inflater.inflate(R.layout.current_weight, container, false);
 
                 listView = (ListView) android.findViewById(R.id.listView);
@@ -119,8 +120,9 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
                 List<TableBean> regolari = new ArrayList<>();
                 List<TableBean> ripescati = new ArrayList<>();
-                for (TableBean t : mapBeans.get(Integer.toString(key))) {
-                    if (t.getTipo().equalsIgnoreCase("0")) {
+                ArrayList<TableBean> arrayList = mapBeans.get(Integer.toString(key));
+                for (TableBean t : arrayList) {
+                    if (t.getF_rip().equalsIgnoreCase("0")) {
                         regolari.add(t);
                     } else {
                         ripescati.add(t);

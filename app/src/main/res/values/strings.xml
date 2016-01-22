@@ -6,6 +6,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="title_Home">Home</string>
-    <string name="title_current_tournament">Ultima Gara</string>
+    <string name="title_tournaments">Lista Tornei</string>
 
 </resources>

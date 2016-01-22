@@ -6,6 +6,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import it.keisoft.garefijlkam.bean.TableBean;
@@ -16,7 +20,9 @@ import it.keisoft.garefijlkam.util.GetInfo;
  * Created by mmarcheselli on 14/12/2015.
  */
 public class ShowTableActivity extends BaseActivity {
-    public static final String EXTRA_INTENT = "WEIGHT";
+    public static final String WEIGHT = "WEIGHT";
+    public static final String ID_GARA = "ID_GARA";
+    private String[] rounds = {"64-esimi","32-esimi","16-esimi","Ottavi","Quarti","SemiFinali","Finali","Podio"};
 
     ViewPager tab;
     TabPagerAdapter tabAdapter;
@@ -29,8 +35,10 @@ public class ShowTableActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        String weight = intent.getExtras().getString(EXTRA_INTENT);
-        new GetTable().execute("http://www.galileoprogetti.com/fijlkam/incontri.php?cat="+weight);
+        String weight = intent.getExtras().getString(WEIGHT);
+        String id_gara = intent.getExtras().getString(ID_GARA);
+
+        new GetTable().execute("http://keisuke85.altervista.org/gareJudo/getInfo.php?id_gara="+id_gara + "&id_cat="+weight);
 
         getLayoutInflater().inflate(R.layout.show_table, frameLayout);
 
@@ -75,10 +83,43 @@ public class ShowTableActivity extends BaseActivity {
     }
 
     private class GetTable extends GetInfo {
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            ArrayList<String> rounds = new ArrayList<String>();
-            String lastRound = "";
+
+        protected void onPostExecute(String json) {
+            try {
+                JSONObject jsonObject = (JSONObject) new JSONArray(json).get(0);
+                int max_round = jsonObject.getInt("max_round");
+
+                JSONArray jsonArray = jsonObject.getJSONArray("risultati");
+                String lastRound = "";
+                for(int j=0; j<jsonArray.length(); j++){
+                    TableBean b = new TableBean((JSONObject) jsonArray.get(j));
+                    if(!lastRound.equalsIgnoreCase(b.getC_round())){
+                        if(beans.size() > 0) {
+                            ArrayList <TableBean> tbs = (ArrayList<TableBean>) beans.clone();
+                            tabAdapter.getMapBeans().put(lastRound, tbs);
+                            beans.clear();
+                            lastRound = b.getC_round();
+                        }else{
+                            lastRound = b.getC_round();
+                        }
+                    }
+                    beans.add(b);
+                }
+                ArrayList <TableBean> tbs = (ArrayList<TableBean>) beans.clone();
+                tabAdapter.getMapBeans().put(lastRound, tbs);
+                beans.clear();
+//                tabAdapter.setStart(0);
+                for(int i=(rounds.length - max_round - 1); i<rounds.length; i++){
+                    tabAdapter.notifyDataSetChanged();
+                    actionBar.addTab(actionBar.newTab().setText(rounds[i]).setTabListener(tabListener));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+//            ArrayList<String> rounds = new ArrayList<String>();
+/*            String lastRound = "";
             int start = -1;
             String numRound = "";
             if(getStrings().size() > 0){
@@ -108,15 +149,15 @@ public class ShowTableActivity extends BaseActivity {
                 ArrayList <TableBean> tbs = (ArrayList<TableBean>) beans.clone();
                 tabAdapter.getMapBeans().put(numRound, tbs);
                 beans.clear();
-                rounds.add(lastRound);
+//                rounds.add(lastRound);
                 if(start != -1){
                     tabAdapter.setStart(start);
                 }
-                for(String s: rounds){
+                for(int i=0; i<rounds.length; i++){
                     tabAdapter.notifyDataSetChanged();
-                    actionBar.addTab(actionBar.newTab().setText(s).setTabListener(tabListener));
+                    actionBar.addTab(actionBar.newTab().setText(rounds[i]).setTabListener(tabListener));
                 }
-            }
+            }*/
         }
     }
 

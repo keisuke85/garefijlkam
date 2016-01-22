@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import it.keisoft.garefijlkam.CurrentTournamentActivity;
 import it.keisoft.garefijlkam.MainActivity;
 import it.keisoft.garefijlkam.R;
+import it.keisoft.garefijlkam.TournamentsActivity;
 
 /**
  * Created by mmarcheselli on 14/12/2015.
@@ -42,7 +43,7 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.navigation_drawer_base_layout);
 
         listArray = new String[]{getString(R.string.title_Home),
-                getString(R.string.title_current_tournament),
+                getString(R.string.title_tournaments),
                 getString(R.string.action_settings)};
 
         frameLayout = (FrameLayout) findViewById(R.id.content_frame);
@@ -50,7 +51,7 @@ public class BaseActivity extends AppCompatActivity {
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         _items = new ArrayList<>();
-        _items.add(new Items(getString(R.string.title_current_tournament), null, R.drawable.icon));
+        _items.add(new Items("0£", getString(R.string.title_tournaments), null, R.drawable.icon));
 //        _items.add(new Items(getString(R.string.action_settings), null, android.R.drawable.ic_menu_send));
 
         View header = getLayoutInflater().inflate(R.layout.list_view_header_layout, null);
@@ -103,7 +104,8 @@ public class BaseActivity extends AppCompatActivity {
 
         if(isLaunch){
             isLaunch = false;
-            openActivity(0);
+            // apro direttamente la lista tornei
+            openActivity(1);
         }
     }
 
@@ -118,7 +120,7 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MainActivity.class));
                 break;
             case 1:
-                intent = new Intent(this, CurrentTournamentActivity.class);
+                intent = new Intent(this, TournamentsActivity.class);
 //                intent.putExtra(ShowPage.ARG_SECTION_NUMBER, "158");
                 startActivity(intent);
                 break;
