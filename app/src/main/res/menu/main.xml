@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".HomeActivity">
 
-    <item
+<!--    <item
         android:title="@string/action_settings"
         app:showAsAction="ifRoom|withText"
         android:orderInCategory="100"
         android:icon="@android:drawable/ic_media_pause"
         android:id="@+id/action_settings"/>
-
+-->
 </menu>

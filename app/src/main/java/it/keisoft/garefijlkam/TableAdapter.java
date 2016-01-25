@@ -43,7 +43,7 @@ public class TableAdapter extends ArrayAdapter<TableBean> {
             holder.socSecondoTextView = (TextView) v.findViewById(R.id.socSecondo);
 //            holder.nameTextView = (TextView) v.findViewById(R.id.personName);
 //            holder.surnameTextView = (TextView) v.findViewById(R.id.personSurname);
-            holder.personImageView = (ImageView) v.findViewById(R.id.primoRes);
+            holder.resultImageView = (ImageView) v.findViewById(R.id.result);
             v.setTag(holder);
         } else {
             holder = (ViewHolder) v.getTag();
@@ -56,7 +56,7 @@ public class TableAdapter extends ArrayAdapter<TableBean> {
             holder.socSecondoTextView.setText(table.getBlu().getT_soc());
         }
         if(table.getImage() != 0) {
-            holder.personImageView.setImageResource(table.getImage());
+            holder.resultImageView.setImageResource(table.getImage());
         }
 //        holder.nameTextView.setText(person.getName());
 //        holder.surnameTextView.setText(person.getSurname());
@@ -69,6 +69,6 @@ public class TableAdapter extends ArrayAdapter<TableBean> {
         TextView socPrimoTextView;
         TextView secondoTextView;
         TextView socSecondoTextView;
-        ImageView personImageView;
+        ImageView resultImageView;
     }
 }

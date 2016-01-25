@@ -7,6 +7,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import it.keisoft.garefijlkam.R;
+
 /**
  * Created by mmarcheselli on 14/12/2015.
  */
@@ -39,6 +41,13 @@ public class TableBean {
             setC_num_inc(jsonObject.getString("c_num_inc"));
             setF_rip(jsonObject.getString("f_rip"));
             setC_win(jsonObject.getString("c_win"));
+            if(getC_win() != null && getC_win().equalsIgnoreCase("1")){
+                setImage(R.drawable.win_white);
+            }else if(getC_win() != null && getC_win().equalsIgnoreCase("2")){
+                setImage(R.drawable.win_blu);
+            }else{
+                setImage(R.drawable.versus);
+            }
             Atleta bianco = new Atleta(jsonObject.getString("c_atl_bia"),jsonObject.getString("t_nome_bia"), null,jsonObject.getString("t_soc_bia"));
             setBianco(bianco);
             Atleta blu = new Atleta(jsonObject.getString("c_atl_blu"),jsonObject.getString("t_nome_blu"), null,jsonObject.getString("t_soc_blu"));

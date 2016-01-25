@@ -47,7 +47,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int i) {
         Bundle args = new Bundle();
 //        args.putInt(TablePart.EXTRA_BUNDLE, i+getStart());
-        args.putInt(TablePart.EXTRA_BUNDLE, getCount()-i);
+        args.putInt(TablePart.EXTRA_BUNDLE, getCount()-i -1);
         TablePart newFragment = new TablePart ();
         newFragment.setArguments(args);
         return newFragment;
@@ -56,7 +56,9 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return mapBeans != null ? mapBeans.size() : 0; //No of Tabs
+        return mapBeans.size() == 0 ? mapBeans.size() : mapBeans.size() +1;
+//        return (mapBeans != null ? mapBeans.size() : 0)+1; //No of Tabs
+//        return (mapBeans != null ? mapBeans.size() : 0); //No of Tabs
     }
 
     public Map<String, ArrayList<TableBean>> getMapBeans() {
@@ -97,7 +99,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
             Bundle bundle = this.getArguments();
             int key = bundle.getInt(TablePart.EXTRA_BUNDLE, 0);
 
-            if(key == 0){
+            if(key == 0 && mapBeans.size() > 0){
                 // uso un layout con una singola listView
                 android = inflater.inflate(R.layout.current_tournament, container, false);
                 listView = (ListView) android.findViewById(R.id.listView);
@@ -135,37 +137,39 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
                 List<TableBean> regolari = new ArrayList<>();
                 List<TableBean> ripescati = new ArrayList<>();
                 ArrayList<TableBean> arrayList = mapBeans.get(Integer.toString(key));
-                for (TableBean t : arrayList) {
-                    if (t.getF_rip().equalsIgnoreCase("0")) {
-                        regolari.add(t);
-                    } else {
-                        ripescati.add(t);
-                    }
-                }
-
-                TableAdapter tableAdapter = new TableAdapter(getContext(), R.layout.list_match_adapter, regolari);
-                listView.setAdapter(tableAdapter);
-
-                TableAdapter tableAdapterRep = new TableAdapter(getContext(), R.layout.list_match_adapter, ripescati);
-                listViewRep.setAdapter(tableAdapterRep);
-
-                TextView textView = (TextView) android.findViewById(R.id.headerRep);
-                textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (linearLayout.getVisibility() == View.GONE) {
-                            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) v.getLayoutParams();
-                            lp.addRule(RelativeLayout.ABOVE, R.id.layoutInf);
-                            lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
-                            expand(linearLayout);
+                if(arrayList != null) {
+                    for (TableBean t : arrayList) {
+                        if (t.getF_rip().equalsIgnoreCase("0")) {
+                            regolari.add(t);
                         } else {
-                            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) v.getLayoutParams();
-                            lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-                            lp.addRule(RelativeLayout.ABOVE);
-                            collapse(linearLayout);
+                            ripescati.add(t);
                         }
                     }
-                });
+
+                    TableAdapter tableAdapter = new TableAdapter(getContext(), R.layout.list_match_adapter, regolari);
+                    listView.setAdapter(tableAdapter);
+
+                    TableAdapter tableAdapterRep = new TableAdapter(getContext(), R.layout.list_match_adapter, ripescati);
+                    listViewRep.setAdapter(tableAdapterRep);
+
+                    TextView textView = (TextView) android.findViewById(R.id.headerRep);
+                    textView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (linearLayout.getVisibility() == View.GONE) {
+                                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) v.getLayoutParams();
+                                lp.addRule(RelativeLayout.ABOVE, R.id.layoutInf);
+                                lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+                                expand(linearLayout);
+                            } else {
+                                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) v.getLayoutParams();
+                                lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+                                lp.addRule(RelativeLayout.ABOVE);
+                                collapse(linearLayout);
+                            }
+                        }
+                    });
+                }
             }
 
             return android;

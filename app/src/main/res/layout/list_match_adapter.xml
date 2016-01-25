@@ -34,25 +34,10 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/primoRes"
+            android:id="@+id/result"
             android:layout_width="0dip"
             android:layout_height="50dip"
-            android:layout_weight="0.1">
-        </ImageView>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.05"
-            android:text="-"
-            android:gravity="center">
-        </TextView>
-
-        <ImageView
-            android:id="@+id/secondoRes"
-            android:layout_width="0dip"
-            android:layout_height="50dip"
-            android:layout_weight="0.1">
+            android:layout_weight="0.25">
         </ImageView>
 
         <LinearLayout
