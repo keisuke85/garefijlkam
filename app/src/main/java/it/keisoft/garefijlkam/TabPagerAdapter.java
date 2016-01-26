@@ -117,9 +117,6 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
                         case "3":
                             tmp.setImage(R.drawable.bronzo);
                             break;
-                        case "4":
-                            tmp.setImage(R.drawable.bronzo);
-                            break;
                     }
                     tmp.setBianco(c.getAtleta());
                     podio.add(tmp);

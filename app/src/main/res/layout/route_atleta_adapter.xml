@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dip" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/round"
+        android:layout_weight="0.2"
+        android:textColor="#000"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/round"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:id="@+id/primo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/namePrimo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:text="primo"
+                android:textColor="#000">
+            </TextView>
+
+            <TextView
+                android:id="@+id/socPrimo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:text="soc.primo"
+                android:textColor="#000">
+            </TextView>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/result"
+            android:layout_width="0dip"
+            android:layout_height="50dip"
+            android:layout_weight="0.2">
+        </ImageView>
+
+        <LinearLayout
+            android:id="@+id/secondo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/nameSecondo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:text="primo"
+                android:textColor="#000">
+            </TextView>
+
+            <TextView
+                android:id="@+id/socSecondo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:text="soc.primo"
+                android:textColor="#000">
+            </TextView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

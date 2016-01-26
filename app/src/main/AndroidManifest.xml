@@ -21,6 +21,7 @@
         <activity android:name=".TournamentsActivity" />
         <activity android:name=".CurrentTournamentActivity" />
         <activity android:name=".ShowTableActivity" />
+        <activity android:name=".RouteActivity" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

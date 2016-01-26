@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import it.keisoft.garefijlkam.bean.Classifica;
 import it.keisoft.garefijlkam.bean.TableBean;
 import it.keisoft.garefijlkam.util.BaseActivity;
+import it.keisoft.garefijlkam.util.Constants;
 import it.keisoft.garefijlkam.util.GetInfo;
 
 /**
@@ -23,7 +24,6 @@ import it.keisoft.garefijlkam.util.GetInfo;
 public class ShowTableActivity extends BaseActivity {
     public static final String WEIGHT = "WEIGHT";
     public static final String ID_GARA = "ID_GARA";
-    private String[] rounds = {"64-esimi","32-esimi","16-esimi","Ottavi","Quarti","SemiFinali","Finali","Podio"};
 
     ViewPager tab;
     TabPagerAdapter tabAdapter;
@@ -118,9 +118,9 @@ public class ShowTableActivity extends BaseActivity {
                 tabAdapter.getMapBeans().put(lastRound, tbs);
                 beans.clear();
 //                tabAdapter.setStart(0);
-                for(int i=(rounds.length - max_round - 1); i<rounds.length; i++){
+                for(int i=(Constants.ROUNDS.length - max_round - 1); i<Constants.ROUNDS.length; i++){
                     tabAdapter.notifyDataSetChanged();
-                    actionBar.addTab(actionBar.newTab().setText(rounds[i]).setTabListener(tabListener));
+                    actionBar.addTab(actionBar.newTab().setText(Constants.ROUNDS[i]).setTabListener(tabListener));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

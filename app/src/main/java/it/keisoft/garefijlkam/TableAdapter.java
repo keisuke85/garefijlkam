@@ -1,12 +1,15 @@
 package it.keisoft.garefijlkam;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -30,7 +33,7 @@ public class TableAdapter extends ArrayAdapter<TableBean> {
     public View getView(int position, View v, ViewGroup parent) {
 
         // Recuperiamo l'oggetti che dobbiamo inserire a questa posizione
-        TableBean table = getItem(position);
+        final TableBean table = getItem(position);
 
         ViewHolder holder;
 
@@ -44,6 +47,8 @@ public class TableAdapter extends ArrayAdapter<TableBean> {
 //            holder.nameTextView = (TextView) v.findViewById(R.id.personName);
 //            holder.surnameTextView = (TextView) v.findViewById(R.id.personSurname);
             holder.resultImageView = (ImageView) v.findViewById(R.id.result);
+            holder.primoLinearLayout = (LinearLayout) v.findViewById(R.id.primo);
+            holder.secondoLinearLayout = (LinearLayout) v.findViewById(R.id.secondo);
             v.setTag(holder);
         } else {
             holder = (ViewHolder) v.getTag();
@@ -58,10 +63,30 @@ public class TableAdapter extends ArrayAdapter<TableBean> {
         if(table.getImage() != 0) {
             holder.resultImageView.setImageResource(table.getImage());
         }
+
+        holder.primoLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewRoute(table.getBianco().getC_atl(), table.getC_id_gara());
+            }
+        });
+        holder.secondoLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewRoute(table.getBlu().getC_atl(), table.getC_id_gara());
+            }
+        });
 //        holder.nameTextView.setText(person.getName());
 //        holder.surnameTextView.setText(person.getSurname());
 
         return v;
+    }
+
+    private void viewRoute(String id_atleta, String id_gara){
+        Intent intent = new Intent(getContext(), RouteActivity.class);
+        intent.putExtra(RouteActivity.ID_ATLETA, id_atleta);
+        intent.putExtra(RouteActivity.ID_GARA, id_gara);
+        getContext().startActivity(intent);
     }
 
     private static class ViewHolder {
@@ -70,5 +95,7 @@ public class TableAdapter extends ArrayAdapter<TableBean> {
         TextView secondoTextView;
         TextView socSecondoTextView;
         ImageView resultImageView;
+        LinearLayout primoLinearLayout;
+        LinearLayout secondoLinearLayout;
     }
 }
