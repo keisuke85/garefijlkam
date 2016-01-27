@@ -24,7 +24,37 @@ public class Atleta {
         this.t_soc = t_soc;
     }
 
-    /*   public Atleta(JSONObject jsonObject){
+    public Atleta(JSONObject jsonObject) {
+        try {
+            setC_atl(jsonObject.getString("c_atl"));
+            setC_soc(jsonObject.getString("c_soc"));
+            setT_nome(jsonObject.getString("t_nome"));
+            setT_soc(jsonObject.getString("t_soc"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "{'c_atl':'" + c_atl + "','c_soc':'" + c_soc + "','t_nome':'" + t_nome + "','t_soc':'" + t_soc + "'}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o != null ? getC_atl().equalsIgnoreCase(((Atleta) o).getC_atl()) : false;
+//        return super.equals(o);
+    }
+
+    /*   @Override
+    public boolean equals(Object o) {
+        if(o!= null) {
+            return this.c_atl.equalsIgnoreCase(((Atleta) o).getC_atl());
+        }else{
+            return false;
+        }
+    }*/
+/*   public Atleta(JSONObject jsonObject){
         try {
             setC_id(jsonObject.getString("c_id_gara"));
             setT_nome(jsonObject.getString("t_nome"));

@@ -2,6 +2,7 @@ package it.keisoft.garefijlkam;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,9 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import it.keisoft.garefijlkam.bean.Atleta;
 import it.keisoft.garefijlkam.bean.TableBean;
+import it.keisoft.garefijlkam.util.SharedPreference;
 
 /**
  * Created by mmarcheselli on 15/12/2015.
@@ -22,11 +25,13 @@ public class TableAdapter extends ArrayAdapter<TableBean> {
 
     private int resource;
     private LayoutInflater inflater;
+    SharedPreference sharedPreference;
 
     public TableAdapter(Context context, int resourceId, List<TableBean> objects) {
         super(context, resourceId, objects);
         resource = resourceId;
         inflater = LayoutInflater.from(context);
+        sharedPreference = new SharedPreference();
     }
 
     @Override
@@ -76,6 +81,41 @@ public class TableAdapter extends ArrayAdapter<TableBean> {
                 viewRoute(table.getBlu().getC_atl(), table.getC_id_gara());
             }
         });
+
+        holder.primoLinearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (checkFavoriteItem(table.getBianco())) {
+                    sharedPreference.removeFavorite(getContext(), table.getBianco());
+                    v.setBackgroundColor(v.getResources().getColor(R.color.noFavAtleta));
+                } else {
+                    sharedPreference.addFavorite(getContext(), table.getBianco());
+                    v.setBackgroundColor(v.getResources().getColor(R.color.favAtleta));
+                }
+                return true;
+            }
+        });
+
+        holder.secondoLinearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(checkFavoriteItem(table.getBlu())){
+                    sharedPreference.removeFavorite(getContext(), table.getBlu());
+                    v.setBackgroundColor(v.getResources().getColor(R.color.noFavAtleta));
+                }else{
+                    sharedPreference.addFavorite(getContext(), table.getBlu());
+                    v.setBackgroundColor(v.getResources().getColor(R.color.favAtleta));
+                }
+                return true;
+            }
+        });
+
+        if(checkFavoriteItem(table.getBianco())){
+            holder.primoLinearLayout.setBackgroundColor(v.getResources().getColor(R.color.favAtleta));
+        }
+        if(checkFavoriteItem(table.getBlu())){
+            holder.secondoLinearLayout.setBackgroundColor(v.getResources().getColor(R.color.favAtleta));
+        }
 //        holder.nameTextView.setText(person.getName());
 //        holder.surnameTextView.setText(person.getSurname());
 
@@ -87,6 +127,21 @@ public class TableAdapter extends ArrayAdapter<TableBean> {
         intent.putExtra(RouteActivity.ID_ATLETA, id_atleta);
         intent.putExtra(RouteActivity.ID_GARA, id_gara);
         getContext().startActivity(intent);
+    }
+
+    /*Checks whether a particular product exists in SharedPreferences*/
+    public boolean checkFavoriteItem(Atleta checkAtleta) {
+        boolean check = false;
+        List<Atleta> favorites = sharedPreference.getFavorites(getContext());
+        if (favorites != null) {
+            for (Atleta atleta : favorites) {
+                if (atleta.equals(checkAtleta)) {
+                    check = true;
+                    break;
+                }
+            }
+        }
+        return check;
     }
 
     private static class ViewHolder {
