@@ -20,12 +20,11 @@ import it.keisoft.garefijlkam.bean.Atleta;
 public class SharedPreference {
 
     public static final String PREFS_NAME = "GF";
-    public static final String FAVORITES = "Atleta_Favorite";
 
     public SharedPreference() {
         super();
     }
-
+/**********************ATLETI******************************/
     // This four methods are used for maintaining favorites.
     public void saveFavorites(Context context, List<Atleta> favorites) {
         SharedPreferences settings;
@@ -37,18 +36,20 @@ public class SharedPreference {
 //            Gson gson = new Gson();
         String jsonFavorites = "[";//gson.toJson(favorites);
         for(int i=0; i<favorites.size();i++){
-            jsonFavorites += favorites.get(i).toString() + (i<favorites.size()+1 ? "," : "");
+            jsonFavorites += favorites.get(i).toString() + ",";
         }
-//        jsonFavorites = jsonFavorites.substring(0, jsonFavorites.length()-1);
+        if(jsonFavorites.lastIndexOf(",") == jsonFavorites.length()-1) {
+            jsonFavorites = jsonFavorites.substring(0, jsonFavorites.length() - 1);
+        }
         jsonFavorites += "]";
 
-        editor.putString(FAVORITES, jsonFavorites);
+        editor.putString(Constants.ATLETA_FAVORITES, jsonFavorites);
 
         editor.commit();
     }
 
     public void addFavorite(Context context, Atleta atleta) {
-        List<Atleta> favorites = getFavorites(context);
+        List<Atleta> favorites = getFavorites(context, Constants.ATLETA_FAVORITES);
         if (favorites == null)
             favorites = new ArrayList<Atleta>();
         favorites.add(atleta);
@@ -56,34 +57,41 @@ public class SharedPreference {
     }
 
     public void removeFavorite(Context context, Atleta atleta) {
-        ArrayList<Atleta> favorites = getFavorites(context);
+        ArrayList<Atleta> favorites = getFavorites(context, Constants.ATLETA_FAVORITES);
         if (favorites != null) {
             favorites.remove(atleta);
             saveFavorites(context, favorites);
         }
     }
 
-    public ArrayList<Atleta> getFavorites(Context context) {
+    public ArrayList getFavorites(Context context, String chiave) {
         SharedPreferences settings;
-        List<Atleta> favorites = new ArrayList<>();
+        List favorites = new ArrayList<>();
 
         settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 /*        SharedPreferences.Editor editor = settings.edit();
-        editor.remove(FAVORITES);
+        editor.remove(chiave);
         editor.apply();*/
 
-        if (settings.contains(FAVORITES)) {
-            String jsonFavorites = settings.getString(FAVORITES, null);
-            try {
-                JSONArray jsonArray = new JSONArray(jsonFavorites);
+        if (settings.contains(chiave)) {
+            String jsonFavorites = settings.getString(chiave, null);
+            switch (chiave) {
+                case Constants.ATLETA_FAVORITES:
+                    try {
+                        JSONArray jsonArray = new JSONArray(jsonFavorites);
 
-                if (jsonArray != null) {
-                    for (int i=0;i<jsonArray.length();i++){
-                        favorites.add(new Atleta((JSONObject)jsonArray.get(i)));
+                        if (jsonArray != null) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                favorites.add(new Atleta((JSONObject) jsonArray.get(i)));
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+                    break;
+                default:
+                    favorites = new ArrayList<String>(Arrays.asList(jsonFavorites.split(",")));
+                    break;
             }
 //            Gson gson = new Gson();
 //            Atleta[] favoriteItems = gson.fromJson(jsonFavorites, Atleta[].class);
@@ -93,7 +101,65 @@ public class SharedPreference {
         } else
             return null;
 
-        return (ArrayList<Atleta>) favorites;
+        return (ArrayList) favorites;
     }
+
+
+    /**********************Stringhe******************************/
+    public void saveFavorites(Context context, String chiave, List<String> favorites) {
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+
+        settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        editor = settings.edit();
+
+//            Gson gson = new Gson();
+        String jsonFavorites = "";//gson.toJson(favorites);
+        for(int i=0; i<favorites.size();i++){
+            jsonFavorites += favorites.get(i).toString() + ",";
+        }
+        if(jsonFavorites.lastIndexOf(",") == jsonFavorites.length()-1) {
+            jsonFavorites = jsonFavorites.substring(0, jsonFavorites.length() - 1);
+        }
+        //jsonFavorites += "]";
+
+        editor.putString(chiave, jsonFavorites);
+
+        editor.commit();
+    }
+
+    public void addFavorite(Context context, String chiave, String favorito) {
+        List<String> favorites = getFavorites(context, chiave);
+        if (favorites == null)
+            favorites = new ArrayList<String>();
+        favorites.add(favorito);
+        saveFavorites(context,chiave, favorites);
+    }
+
+    public void removeFavorite(Context context, String chiave, String favorito) {
+        ArrayList<String> favorites = getFavorites(context, chiave);
+        if (favorites != null) {
+            favorites.remove(favorito);
+            saveFavorites(context, chiave, favorites);
+        }
+    }
+
+/*    public ArrayList<String> getFavorites(Context context, String chiave) {
+        SharedPreferences settings;
+        List<String> favorites = new ArrayList<>();
+
+        settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+/*        SharedPreferences.Editor editor = settings.edit();
+        editor.remove(FAVORITES);
+        editor.apply();
+
+        if (settings.contains(chiave)) {
+            String jsonFavorites = settings.getString(chiave, null);
+            favorites = new ArrayList<String>(Arrays.asList(jsonFavorites.split(",")));
+        } else
+            return null;
+
+        return (ArrayList<String>) favorites;
+    }*/
 
 }

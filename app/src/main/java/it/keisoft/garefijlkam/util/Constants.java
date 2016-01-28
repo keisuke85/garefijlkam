@@ -5,4 +5,8 @@ package it.keisoft.garefijlkam.util;
  */
 public class Constants {
     public final static String[] ROUNDS = {"64-esimi","32-esimi","16-esimi","Ottavi","Quarti","SemiFinali","Finali","Podio"};
+    public static final String ATLETA_FAVORITES = "Atleta_Favorite";
+    public static final String WEIGHT_FAVORITES = "Weight_Favorite";
+    public static final String TOURNAMENT_FAVORITES = "Tournament_Favorite";
+
 }

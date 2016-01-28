@@ -16,6 +16,7 @@ import java.util.List;
 
 import it.keisoft.garefijlkam.bean.Atleta;
 import it.keisoft.garefijlkam.bean.TableBean;
+import it.keisoft.garefijlkam.util.Constants;
 import it.keisoft.garefijlkam.util.SharedPreference;
 
 /**
@@ -132,7 +133,7 @@ public class TableAdapter extends ArrayAdapter<TableBean> {
     /*Checks whether a particular product exists in SharedPreferences*/
     public boolean checkFavoriteItem(Atleta checkAtleta) {
         boolean check = false;
-        List<Atleta> favorites = sharedPreference.getFavorites(getContext());
+        List<Atleta> favorites = sharedPreference.getFavorites(getContext(), Constants.ATLETA_FAVORITES);
         if (favorites != null) {
             for (Atleta atleta : favorites) {
                 if (atleta.equals(checkAtleta)) {
