@@ -182,4 +182,8 @@ public class CurrentTournamentActivity extends BaseActivity {
         return check;
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }

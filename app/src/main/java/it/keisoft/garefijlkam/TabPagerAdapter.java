@@ -119,6 +119,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
                             break;
                     }
                     tmp.setBianco(c.getAtleta());
+                    tmp.setC_id_gara(c.getC_id_gara());
                     podio.add(tmp);
                 }
 

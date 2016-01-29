@@ -118,7 +118,7 @@ public class SharedPreference {
         for(int i=0; i<favorites.size();i++){
             jsonFavorites += favorites.get(i).toString() + ",";
         }
-        if(jsonFavorites.lastIndexOf(",") == jsonFavorites.length()-1) {
+        if(jsonFavorites.length() != 0 && jsonFavorites.lastIndexOf(",") == jsonFavorites.length()-1) {
             jsonFavorites = jsonFavorites.substring(0, jsonFavorites.length() - 1);
         }
         //jsonFavorites += "]";

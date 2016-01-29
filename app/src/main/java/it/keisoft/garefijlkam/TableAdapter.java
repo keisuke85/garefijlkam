@@ -76,13 +76,6 @@ public class TableAdapter extends ArrayAdapter<TableBean> {
                 viewRoute(table.getBianco().getC_atl(), table.getC_id_gara());
             }
         });
-        holder.secondoLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewRoute(table.getBlu().getC_atl(), table.getC_id_gara());
-            }
-        });
-
         holder.primoLinearLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -97,25 +90,35 @@ public class TableAdapter extends ArrayAdapter<TableBean> {
             }
         });
 
-        holder.secondoLinearLayout.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if(checkFavoriteItem(table.getBlu())){
-                    sharedPreference.removeFavorite(getContext(), table.getBlu());
-                    v.setBackgroundColor(v.getResources().getColor(R.color.noFavAtleta));
-                }else{
-                    sharedPreference.addFavorite(getContext(), table.getBlu());
-                    v.setBackgroundColor(v.getResources().getColor(R.color.favAtleta));
-                }
-                return true;
-            }
-        });
-
         if(checkFavoriteItem(table.getBianco())){
             holder.primoLinearLayout.setBackgroundColor(v.getResources().getColor(R.color.favAtleta));
         }
-        if(checkFavoriteItem(table.getBlu())){
-            holder.secondoLinearLayout.setBackgroundColor(v.getResources().getColor(R.color.favAtleta));
+
+        if(holder.secondoLinearLayout != null) {
+            holder.secondoLinearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewRoute(table.getBlu().getC_atl(), table.getC_id_gara());
+                }
+            });
+
+            holder.secondoLinearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (checkFavoriteItem(table.getBlu())) {
+                        sharedPreference.removeFavorite(getContext(), table.getBlu());
+                        v.setBackgroundColor(v.getResources().getColor(R.color.noFavAtleta));
+                    } else {
+                        sharedPreference.addFavorite(getContext(), table.getBlu());
+                        v.setBackgroundColor(v.getResources().getColor(R.color.favAtleta));
+                    }
+                    return true;
+                }
+            });
+
+            if (checkFavoriteItem(table.getBlu())) {
+                holder.secondoLinearLayout.setBackgroundColor(v.getResources().getColor(R.color.favAtleta));
+            }
         }
 //        holder.nameTextView.setText(person.getName());
 //        holder.surnameTextView.setText(person.getSurname());
