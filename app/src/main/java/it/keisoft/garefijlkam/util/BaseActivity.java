@@ -1,6 +1,9 @@
 package it.keisoft.garefijlkam.util;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,8 +14,23 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 import it.keisoft.garefijlkam.CurrentTournamentActivity;
 import it.keisoft.garefijlkam.MainActivity;
@@ -37,10 +55,15 @@ public class BaseActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
+    private GoogleCloudMessaging gcm;
+    private Context context;
+    private String regid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer_base_layout);
+        context = this;
 
         listArray = new String[]{getString(R.string.title_Home),
                 getString(R.string.title_tournaments),
@@ -105,6 +128,10 @@ public class BaseActivity extends AppCompatActivity {
 
         if(isLaunch){
             isLaunch = false;
+
+            gcm = GoogleCloudMessaging.getInstance(this);
+
+            registerInBackground();
             // apro direttamente la lista tornei
             openActivity(1);
         }
@@ -201,10 +228,84 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(mDrawerLayout.isDrawerOpen(mDrawerList)){
-            mDrawerLayout.closeDrawer(mDrawerList);
+            finish();
+//            mDrawerLayout.closeDrawer(mDrawerList);
         }else{
             mDrawerLayout.openDrawer(mDrawerList);
         }
+    }
+
+
+    private void registerInBackground() {
+        new AsyncTask<Void, Void, String>() {
+            private ProgressDialog dialog=null;
+
+            protected void onPreExecute() {
+                dialog= ProgressDialog.show(context, "Registrazione presso GCM", "Tentativo in corso...", true, false);
+            };
+
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg = "";
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(context);
+                    }
+                    regid = gcm.register(Constants.SENDER_ID);
+
+                } catch (IOException ex) {
+                    return null;
+                }
+                return regid;
+            }
+
+            @Override
+            protected void onPostExecute(String regid) {
+                dialog.dismiss();
+                if (regid!=null) {
+                    sendIDToApplication(regid);
+                    //mDisplay.setText(regid);
+                }
+                else
+                    Toast.makeText(context,"Errore: registrazione su GCM non riuscita!", Toast.LENGTH_LONG).toString();
+            }
+        }.execute();
+    }
+
+    private void sendIDToApplication(String regid) {
+        new AsyncTask<String, Void, Void>() {
+            @Override
+            protected Void doInBackground(String... params) {
+                String regid=params[0];
+                try {
+                    URL url = new URL(Constants.BACKEND_URL);
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.setReadTimeout(10000);
+                    urlConnection.setConnectTimeout(15000);
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setDoInput(true);
+                    urlConnection.setDoOutput(true);
+                    String postParameter = "regId=" + regid;
+
+                    OutputStreamWriter os = new OutputStreamWriter(urlConnection.getOutputStream());
+                    BufferedWriter writer = new BufferedWriter(os);
+                    writer.write(postParameter);
+                    writer.flush();
+                    writer.close();
+                    os.close();
+                    urlConnection.connect();
+                    int respCode = urlConnection.getResponseCode();
+
+                    urlConnection.disconnect();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        }.execute(regid);
     }
 
 }
