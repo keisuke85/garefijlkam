@@ -34,6 +34,7 @@ import java.util.List;
 
 import it.keisoft.garefijlkam.CurrentTournamentActivity;
 import it.keisoft.garefijlkam.MainActivity;
+import it.keisoft.garefijlkam.MyPreferencesActivity;
 import it.keisoft.garefijlkam.R;
 import it.keisoft.garefijlkam.TournamentsActivity;
 
@@ -48,6 +49,7 @@ public class BaseActivity extends AppCompatActivity {
 
     protected String[] listArray;
     protected ArrayList<Items> _items;
+    protected ArrayList<Items> _itemsND;
 
     protected static int position;
 
@@ -55,15 +57,10 @@ public class BaseActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
-    private GoogleCloudMessaging gcm;
-    private Context context;
-    private String regid;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer_base_layout);
-        context = this;
 
         listArray = new String[]{getString(R.string.title_Home),
                 getString(R.string.title_tournaments),
@@ -76,11 +73,14 @@ public class BaseActivity extends AppCompatActivity {
         _items = new ArrayList<>();
         _items.add(new Items("0£", getString(R.string.title_tournaments), null, R.drawable.icon));
 //        _items.add(new Items(getString(R.string.action_settings), null, android.R.drawable.ic_menu_send));
+        _itemsND = new ArrayList<>();
+        _itemsND.add(new Items("0£", getString(R.string.title_tournaments), null, R.drawable.icon));
+        _itemsND.add(new Items("1£", getString(R.string.action_settings), null, R.drawable.ic_action_settings));
 
         View header = getLayoutInflater().inflate(R.layout.list_view_header_layout, null);
         mDrawerList.addHeaderView(header);
 
-        mDrawerList.setAdapter(new NavigationDrawerListAdapter(this, _items));
+        mDrawerList.setAdapter(new NavigationDrawerListAdapter(this, _itemsND));
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -129,9 +129,6 @@ public class BaseActivity extends AppCompatActivity {
         if(isLaunch){
             isLaunch = false;
 
-            gcm = GoogleCloudMessaging.getInstance(this);
-
-            registerInBackground();
             // apro direttamente la lista tornei
             openActivity(1);
         }
@@ -152,12 +149,11 @@ public class BaseActivity extends AppCompatActivity {
 //                intent.putExtra(ShowPage.ARG_SECTION_NUMBER, "158");
                 startActivity(intent);
                 break;
-/*            case 2:
-                intent = new Intent(this, ShowPage.class);
-                intent.putExtra(ShowPage.ARG_SECTION_NUMBER, "servizi.html");
-                startActivity(intent);
+            case 2:
+                Intent i = new Intent(this, MyPreferencesActivity.class);
+                startActivity(i);
                 break;
-            case 3:
+/*            case 3:
                 startActivity(new Intent(this, GalleryActivity.class));
 //                intent = new Intent(this, GalleryActivity.class);
 //                intent.putExtra(ShowPage.ARG_SECTION_NUMBER, "41");
@@ -194,6 +190,7 @@ public class BaseActivity extends AppCompatActivity {
 //                startActivity(intent);
                 break;
 */            default:
+//                Toast.makeText(context,"premuto " + position, Toast.LENGTH_LONG).show();
                 break;
         }
     }
@@ -228,84 +225,11 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(mDrawerLayout.isDrawerOpen(mDrawerList)){
-            finish();
-//            mDrawerLayout.closeDrawer(mDrawerList);
+//            finish();
+            mDrawerLayout.closeDrawer(mDrawerList);
         }else{
             mDrawerLayout.openDrawer(mDrawerList);
         }
-    }
-
-
-    private void registerInBackground() {
-        new AsyncTask<Void, Void, String>() {
-            private ProgressDialog dialog=null;
-
-            protected void onPreExecute() {
-                dialog= ProgressDialog.show(context, "Registrazione presso GCM", "Tentativo in corso...", true, false);
-            };
-
-            @Override
-            protected String doInBackground(Void... params) {
-                String msg = "";
-                try {
-                    if (gcm == null) {
-                        gcm = GoogleCloudMessaging.getInstance(context);
-                    }
-                    regid = gcm.register(Constants.SENDER_ID);
-
-                } catch (IOException ex) {
-                    return null;
-                }
-                return regid;
-            }
-
-            @Override
-            protected void onPostExecute(String regid) {
-                dialog.dismiss();
-                if (regid!=null) {
-                    sendIDToApplication(regid);
-                    //mDisplay.setText(regid);
-                }
-                else
-                    Toast.makeText(context,"Errore: registrazione su GCM non riuscita!", Toast.LENGTH_LONG).toString();
-            }
-        }.execute();
-    }
-
-    private void sendIDToApplication(String regid) {
-        new AsyncTask<String, Void, Void>() {
-            @Override
-            protected Void doInBackground(String... params) {
-                String regid=params[0];
-                try {
-                    URL url = new URL(Constants.BACKEND_URL);
-                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                    urlConnection.setReadTimeout(10000);
-                    urlConnection.setConnectTimeout(15000);
-                    urlConnection.setRequestMethod("POST");
-                    urlConnection.setDoInput(true);
-                    urlConnection.setDoOutput(true);
-                    String postParameter = "regId=" + regid;
-
-                    OutputStreamWriter os = new OutputStreamWriter(urlConnection.getOutputStream());
-                    BufferedWriter writer = new BufferedWriter(os);
-                    writer.write(postParameter);
-                    writer.flush();
-                    writer.close();
-                    os.close();
-                    urlConnection.connect();
-                    int respCode = urlConnection.getResponseCode();
-
-                    urlConnection.disconnect();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                return null;
-            }
-        }.execute(regid);
     }
 
 }

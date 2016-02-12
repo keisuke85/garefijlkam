@@ -56,7 +56,7 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
             view = mInflater.inflate(R.layout.drawer_list_item, null);
             holder = new ViewHolder();
             holder.itemName = (TextView) view.findViewById(R.id.item_name_txtview);
-            holder.itemDescription = (TextView) view.findViewById(R.id.item_name_description);
+//            holder.itemDescription = (TextView) view.findViewById(R.id.item_name_description);
             holder.itemIcon = (ImageView) view.findViewById(R.id.item_icon_imgview);
             view.setTag(holder);
         }else{
@@ -65,7 +65,7 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
 
         Items item = (Items) getItem(i);
         holder.itemName.setText(item.getItemName());
-        holder.itemDescription.setText(item.getItemDesc());
+//        holder.itemDescription.setText(item.getItemDesc());
         holder.itemIcon.setBackgroundResource((int)item.getIconId());
 
         return view;

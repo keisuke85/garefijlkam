@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:title="@string/allow_notification"
+        android:summary="@string/allow_notification_desc"
+        android:key="riceviNotifica"
+        android:defaultValue="false" />
+</PreferenceScreen>

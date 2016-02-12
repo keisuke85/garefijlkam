@@ -31,6 +31,7 @@
         <activity android:name=".CurrentTournamentActivity" />
         <activity android:name=".ShowTableActivity" />
         <activity android:name=".RouteActivity" />
+        <activity android:name=".MyPreferencesActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"

@@ -8,4 +8,7 @@
     <string name="title_Home">Home</string>
     <string name="title_tournaments">Lista Tornei</string>
 
+    <string name="allow_notification">Attiva le notifiche</string>
+    <string name="allow_notification_desc">Ricevi una notifica quando un nuovo torneo inizia
+                                            e quando ci sono aggiornamenti sui tuoi atleti preferiti</string>
 </resources>

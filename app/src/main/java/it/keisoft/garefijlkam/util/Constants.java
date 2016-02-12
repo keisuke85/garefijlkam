@@ -9,7 +9,8 @@ public class Constants {
     public static final String WEIGHT_FAVORITES = "Weight_Favorite";
     public static final String TOURNAMENT_FAVORITES = "Tournament_Favorite";
 
-    public static final String BACKEND_URL="http://keisuke85.altervista.org/gareJudo/register.php";
+    public static final String REGISTER_URL="http://keisuke85.altervista.org/gareJudo/register.php";
+    public static final String UNREGISTER_URL="http://keisuke85.altervista.org/gareJudo/unregister.php";
     public static final String SENDER_ID ="482095533119";
 
 }
